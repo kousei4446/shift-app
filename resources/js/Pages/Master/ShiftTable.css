@@ -1,0 +1,40 @@
+.shift-table-container {
+    margin: 20px;
+    overflow-x: auto;
+    /* テーブルが横に長くなったときにスクロールできるように */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    /* 枠線を重ならないように */
+    font-family: 'Arial', sans-serif;
+    /* フォントを指定 */
+}
+
+th,
+td {
+    border: 1px solid #dddddd;
+    /* 枠線の色を指定 */
+    text-align: left;
+    /* テキストの位置を左寄せ */
+    padding: 8px;
+    /* セルのパディングを指定 */
+}
+
+th {
+    background-color: #f2f2f2;
+    /* ヘッダーの背景色を指定 */
+    font-weight: bold;
+    /* ヘッダーのフォントを太字に */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+    /* 偶数行の背景色を指定 */
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+    /* 行にマウスオーバーしたときの背景色 */
+}
