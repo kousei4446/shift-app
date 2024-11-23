@@ -1,8 +1,8 @@
 .selected {
     position: relative;
-    /* 相対位置を設定 */
     overflow: hidden;
-    /* 子要素がはみ出ないようにする */
+    /* リップルアニメーションの影響を避けるため、pointer-events: noneを追加 */
+    pointer-events: auto;
 }
 
 .selected::after {
@@ -12,13 +12,21 @@
     left: 50%;
     width: 100%;
     height: 100%;
-    background-color: rgba(173, 216, 230, 0.5);
+    background-color: rgba(85, 233, 246, 0.5);
     /* 薄い青色 */
     /* 円形にする */
     transform: translate(-50%, -50%);
     /* 中心に配置 */
     animation: ripple 0.3s ease-out;
     /* アニメーションを追加 */
+}
+
+/* 無効化する日付用 */
+.inactive-day {
+    font-weight: lighter !important;
+    color: rgba(0, 0, 0, 0.5) !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
 }
 
 @keyframes ripple {
@@ -33,23 +41,43 @@
     }
 }
 
-.fc .fc-toolbar.fc-header-toolbar {
-    margin: 0px;
-}
-
-.fc .fc-toolbar-title {
-    font-size: 20px;
-    margin: 0px;
+/* クリック可能な日付 */
+.fc-day.clickable {
     font-weight: bold;
-    color: #333;
+    color: black;
+    /* 通常の文字色 */
+    pointer-events: auto;
+    /* クリックを有効にする */
+    cursor: pointer;
+    /* 通常のカーソル */
 }
 
-.subBtn {
-    transition: all 0.2s;
-    box-shadow: 0px 0px 9px -4px #777777
+/* クリック不可能な日付 */
+.fc-day.inactive-day {
+    font-weight: lighter;
+    color: rgba(0, 0, 0, 0.5);
+    /* 薄い文字 */
+    cursor: not-allowed;
+    /* 無効のカーソル */
+    pointer-events: none;
+    /* クリックイベントを無効にする */
 }
 
-.subBtn:hover {
-    transform: translateY(4px);
-    box-shadow: none;
+.inactive-day {
+    color: rgba(0, 0, 0, 0.5);
+    /* 薄い字 */
+    cursor: not-allowed;
+    /* 無効のカーソル */
+    pointer-events: none;
+    /* クリック無効 */
+}
+
+.clickable {
+    font-weight: bold;
+    /* クリック可能な日を太字に */
+}
+
+.selected {
+    background-color: rgba(93, 214, 238, 0.5);
+    /* 薄い青色 */
 }

@@ -5,23 +5,32 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Shift;
+use App\Models\Prohibitdays;
 use Carbon\Carbon;
 
 class SubmitController extends Controller
 {
     public function create()
     {
-        $userId=Auth::id();
+        $userId = Auth::id();
         $currentMonth = Carbon::now()->format('Y-m');
-        //"like", "$currentMonth%"は、2023-10%のようにワイルドカード%で終わらせることで、その月の任意の日に該当するレコードを抽出します。
-
+        $nextMonth = Carbon::now()->addMonth()->format('Y-m'); // 来月の日付を取得
+        
+        // ユーザーが来月のシフトを既に提出したか確認
         $hasSubmittedShifts = Shift::where('user_id', $userId)
-                                    ->whereYear('date', Carbon::now()->year)
-                                    ->whereMonth('date', Carbon::now()->month)
+                                    ->whereYear('date', Carbon::now()->year)  // 現在の年を使用
+                                    ->whereMonth('date', Carbon::now()->addMonth()->month)  // 来月の月を確認
                                     ->exists();
-
-        return inertia('Submit/Submit',['hasSubmittedShifts'=>$hasSubmittedShifts,]); // Inertiaを使用して登録ページを表示
+        
+        // 禁止日を取得 (Prohibitdays モデルから取得)
+        $prohibitdays = Prohibitdays::all(); // 禁止日のデータを取得する
+        
+        return inertia('Submit/Submit', [
+            'hasSubmittedShifts' => $hasSubmittedShifts,
+            'prohibitdays' => $prohibitdays,  // 禁止日をビューに渡す
+        ]);
     }
+    
 
     public function store(Request $request)
     {
@@ -29,9 +38,10 @@ class SubmitController extends Controller
         $dates = $request->date;
         $userId=Auth::id();
         $currentMonth = Carbon::now()->format('Y-m');//現在の年月
+        $nextMonth = Carbon::now()->addMonth()->format('Y-m'); // 来月の日付を取得
         
         Shift::where('user_id',$userId)
-            ->where('date','like',"$currentMonth%")
+            ->where('date','like',"$nextMonth%")
             ->delete();
 
     

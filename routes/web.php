@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
     //管理者画面のルート
     Route::get('/master',[MasterController::class,'create'])->name('master');
     Route::post('/master',[MasterController::class,'store'])->name('master.store');
+    Route::post('/master',[MasterController::class,'store2'])->name('master.store2');
 
 });
 

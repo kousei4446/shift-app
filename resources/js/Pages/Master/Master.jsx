@@ -8,6 +8,7 @@ import MasterModal from './MasterModal';
 import NextMonthDates from './NextMonthDates';
 import ShiftTable from './ShiftTable';
 import Confirm from './Confirm';
+import OpenCa from './OpenCa';
 
 function Master({ shifts, count, datas }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -84,6 +85,7 @@ function Master({ shifts, count, datas }) {
             {open && <MasterModal open={open} setOpen={setOpen} datas={selectedMembersByDate} count={count} />}
             <Button onClick={() => setOpenCon(true)} className="subBtn" variant="outlined">公開</Button>
             {openCon && <Confirm open={openCon} setOpen={setOpenCon} />}
+            <OpenCa />
         </div>
     );
 }

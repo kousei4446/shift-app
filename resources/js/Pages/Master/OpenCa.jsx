@@ -1,38 +1,32 @@
 import { useEffect, useState } from "react";
-import Head from "../Home/Head";
-import Sidevar from "../Home/Sidevar";
 import { Button } from "@mui/material";
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import jaLocale from '@fullcalendar/core/locales/ja';
 import holiday from 'holiday-jp';
-import './Submit.css'; // あなたのスタイル
-import SubmitModal from "./SubmitModal";
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
-import Callender from "../Master/Callender";
+import { useForm } from "@inertiajs/react";
 
 
-function Submit({ hasSubmittedShifts, prohibitdays }) {
+function OpenCa() {
     const [isOpen, setIsOpen] = useState(false);
     const [open, setOpen] = useState(false);
     const [selectedDates, setSelectedDates] = useState(new Set());
-    // console.log(hasSubmittedShifts)
+
     const handleDateClick = (info) => {
         const date = info.date;
         const day = date.getDay();
         const year = date.getFullYear();
-        const month = date.getMonth(); // 例: 0（1月）
-        const days = date.getDate(); // 例: 15
+        const month = date.getMonth();
+        const days = date.getDate();
         const checkDate = new Date(year, month, days);
         const holidayCheck = holiday.isHoliday(checkDate);
 
-        // 月曜日（1）と水曜日（3）の場合のみクリックを有効にする
-        if ((day === 1 || day === 3) && !holidayCheck && !prohibitDates.includes(info.dateStr)) {
-            const dateString = info.dateStr; // YYYY-MM-DD形式の文字列
+        if ((day === 1 || day === 3) && !holidayCheck) {
+            const dateString = info.dateStr;
             const newSelectedDates = new Set(selectedDates);
 
-            // 既に選択されている場合は削除、そうでなければ追加
             if (newSelectedDates.has(dateString)) {
                 newSelectedDates.delete(dateString);
             } else {
@@ -43,41 +37,55 @@ function Submit({ hasSubmittedShifts, prohibitdays }) {
             info.dayEl.classList.toggle('selected');
         }
     };
-
-
-    const prohibitDates = prohibitdays.map(day => day.date); // prohibitdaysから禁止日を抽出
-
-    const dayCellDidMount = (info, prohibitdays) => {
-        const prohibitDates = prohibitdays.map(day => day.date); // prohibitdaysから禁止日を抽出
+    // console.log(selectedDates)
+    const dayCellDidMount = (info) => {
         const date = info.date;
         const day = date.getDay();
         const year = date.getFullYear();
-        const month = date.getMonth(); // 例: 0（1月）
-        const days = date.getDate(); // 例: 15
+        const month = date.getMonth();
+        const days = date.getDate();
         const checkDate = new Date(year, month, days);
         const holidayCheck = holiday.isHoliday(checkDate);
-        // 月曜日（1）と水曜日（3）の場合以外はスタイルを適用
-        if ((day === 1 || day === 3) && !holidayCheck && !prohibitDates.includes(info.dateStr)) {
-            info.el.style.fontWeight = 'bold';
+
+        if ((day !== 1 && day !== 3) || holidayCheck) {
+            info.el.style.color = 'rgba(0, 0, 0, 0.5)';
+            info.el.style.cursor = 'not-allowed';
+            info.el.style.pointerEvents = 'none';
         } else {
-            info.el.style.color = 'rgba(0, 0, 0, 0.5)'; // 薄い字にする
-            info.el.style.cursor = 'not-allowed'; // カーソルを無効の指にする
-            info.el.style.pointerEvents = 'none'; // クリックイベントを無効化
+            info.el.style.fontWeight = 'bold';
         }
     };
+
     const today = new Date();
     const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+
+    const { setData, post } = useForm({ datas: [] });
+    useEffect(() => {
+        const newSelectedDates = Array.from(selectedDates);
+        setData('datas', newSelectedDates);
+    }, [selectedDates]); // selectedDatesが更新されるたびにリセット
+    const handleSubmit = async () => {
+        // 選択された日付をセット
+
+        const newSelectedDates = Array.from(selectedDates);
+        console.log(newSelectedDates)
+        console.log(selectedDates)
+        setData('datas', newSelectedDates);
+
+        // データ送信後に状態リセット
+        post(route('master.store2'));
+        setData('datas', []); // 送信後に date を空にリセット
+    };
+
 
     return (
         <>
             <div>
-                <Head isOpen={isOpen} setIsOpen={setIsOpen} />
-                {isOpen && <Sidevar setIsOpen={setIsOpen} />}
                 <div style={{ marginTop: "24px", marginLeft: "16px", marginRight: "16px" }}>
                     <FullCalendar
                         plugins={[dayGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
-                        initialDate={nextMonth} // 来月の初日を設定
+                        initialDate={nextMonth}
                         headerToolbar={{
                             start: 'title',
                             center: '',
@@ -89,7 +97,7 @@ function Submit({ hasSubmittedShifts, prohibitdays }) {
                         showNonCurrentDates={false}
                         hiddenDays={[0, 6]}
                         dateClick={handleDateClick}
-                        dayCellDidMount={(info) => dayCellDidMount(info, prohibitdays)} // dayCellDidMountイベントハンドラを追加
+                        dayCellDidMount={dayCellDidMount}
                     />
                 </div>
                 <br />
@@ -102,16 +110,14 @@ function Submit({ hasSubmittedShifts, prohibitdays }) {
                     <Button
                         className="subBtn"
                         variant="outlined"
-                        onClick={() => setOpen(!open)}
+                        onClick={handleSubmit}
                     >
-                        <EditCalendarIcon style={{ fontSize: "16px" }} />{hasSubmittedShifts && "再"}提出
+                        <EditCalendarIcon style={{ fontSize: "16px" }} />選択した日付を無効にしてカレンダーを公開する
                     </Button>
                 </div>
-
             </div>
-            {open && <SubmitModal open={open} setOpen={setOpen} selectedDates={selectedDates} hasSubmittedShifts={hasSubmittedShifts} />}
         </>
     );
 }
 
-export default Submit;
+export default OpenCa;

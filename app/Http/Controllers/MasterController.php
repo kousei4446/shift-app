@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Shift;
 use App\Models\CompShift;
+use App\Models\Prohibitdays;
 use Carbon\Carbon;
 class MasterController extends Controller
 {
@@ -13,7 +14,7 @@ class MasterController extends Controller
         // リレーション名をuserに修正
         $shifts = Shift::with('user')->get(); // 'users' を 'user' に修正
 
-            // 現在の日付を取得
+        // 現在の日付を取得
         $currentDate = Carbon::now();
         $datas = CompShift::all();
         
@@ -50,7 +51,31 @@ class MasterController extends Controller
             }
         }
         return redirect()->route('master'); // 完了後のリダイレクト
-
-
     }
+    public function store2(Request $request)
+    {
+        // `Prohibitdays` モデルのテーブルを削除
+        Prohibitdays::truncate();
+    
+        // `datas` を取得
+        $datas = $request->input('datas');
+        // dd($datas);
+    
+        // データが存在するかを確認
+        if (is_null($datas)) {
+            return redirect()->route('master')->withErrors('データが送信されていません');
+        }
+    
+        // `datas` のデータを保存
+        foreach ($datas as $date) {
+            // Carbonで日付を解析
+            $date = Carbon::parse($date);
+            Prohibitdays::create([
+                'date' => $date->toDateString(),  // Y-m-d 形式で保存
+            ]);
+        }
+    
+        return redirect()->route('master');
+    }
+    
 }
