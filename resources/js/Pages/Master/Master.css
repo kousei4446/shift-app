@@ -16,9 +16,9 @@
 
 
 .shift-button:hover {
-    background-color: #007bff;
+    /* background-color: #007bff; */
     /* ホバー時の背景色 */
-    color: white;
+    color: blue;
     /* ホバー時の文字色 */
 }
 

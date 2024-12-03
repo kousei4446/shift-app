@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\SubmitController;
 use App\Http\Controllers\ConfirmController;
 use App\Http\Controllers\MasterController;
+use App\Http\Controllers\NextShiftController;
 
 
 
@@ -42,9 +43,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //管理者画面のルート
+    Route::get('/nextshift',[NextShiftController::class,'store'])->name('nextshift');
+    Route::post('/nextshift',[NextShiftController::class,'store'])->name('nextshift');
     Route::get('/master',[MasterController::class,'create'])->name('master');
     Route::post('/master',[MasterController::class,'store'])->name('master.store');
-    Route::post('/master',[MasterController::class,'store2'])->name('master.store2');
+    Route::get('/master/store2',[MasterController::class,'store2'])->name('master.store2');
+    Route::post('/master/store2',[MasterController::class,'store2'])->name('master.store2');
+    Route::get('/master/del',[MasterController::class,'del'])->name('master.del');
+    Route::delete('/master/del',[MasterController::class,'del'])->name('master.del');
 
 });
 

@@ -6,6 +6,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { Button } from '@mui/material';
 
 function ShiftTable({ datas }) {
+
     const groupedDatas = datas.reduce((acc, curr) => {
         if (!acc[curr.date]) {
             acc[curr.date] = [];
@@ -16,6 +17,11 @@ function ShiftTable({ datas }) {
 
     const sortedDates = Object.keys(groupedDatas).sort((a, b) => new Date(a) - new Date(b));
 
+    // 日付ごとのシフトメンバーをグループ化する（既にオブジェクト形式なのでそのままでOK）
+
+    // 日付をソート
+
+    // PDF生成用の関数
     const generatePDF = () => {
         const input = document.getElementById('shift-table'); // テーブルのIDを指定
         html2canvas(input)
@@ -67,8 +73,6 @@ function ShiftTable({ datas }) {
                     })}
                 </tbody>
             </table>
-
-
         </div>
     );
 }

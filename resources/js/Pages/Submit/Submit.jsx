@@ -66,7 +66,7 @@ function Submit({ hasSubmittedShifts, prohibitdays }) {
         }
     };
     const today = new Date();
-    const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+    const nextMonth = new Date(today.getFullYear(), today.getMonth() +1, 1);
 
     return (
         <>

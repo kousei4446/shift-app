@@ -34,7 +34,3 @@ tr:nth-child(even) {
     /* 偶数行の背景色を指定 */
 }
 
-tr:hover {
-    background-color: #f1f1f1;
-    /* 行にマウスオーバーしたときの背景色 */
-}

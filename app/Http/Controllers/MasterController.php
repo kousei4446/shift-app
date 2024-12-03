@@ -35,13 +35,24 @@ class MasterController extends Controller
 
         return inertia('Master/Master', ['shifts' => $shifts,'count'=>$count,'datas'=>$datas]);
     }
-    public function store(Request $request){
-        // comp_shifts テーブル内の全データを削除
-        CompShift::truncate(); // または CompShift::query()->delete(); を使うこともできます
-        
-        $datas = $request->input('datas'); // datasを取得
-        // dd($datas);
+    public function store(Request $request)
+    {
+        // comp_shifts テーブルのデータをすべて削除
+        CompShift::truncate();
+    
+        // リクエストデータを取得
+    
+        // if (empty($datas) || !is_array($datas)) {
+        //     return redirect()->route('master')->with('error', 'シフトデータが不正です。');
+        // }
+    
+        // デバッグ用出力
+        // \Log::info('Received data', ['datas' => $datas]); // ログに記録
 
+        $datas = $request->input('date'); // 'data' の中の 'date' を取得
+        // dd($request->all()); // 送信されたデータを表示
+
+        // データを保存
         foreach ($datas as $date => $members) {
             foreach ($members as $member) {
                 CompShift::create([
@@ -50,8 +61,11 @@ class MasterController extends Controller
                 ]);
             }
         }
-        return redirect()->route('master'); // 完了後のリダイレクト
+    
+        return redirect()->route('confirm')->with('success', 'シフトが正常に保存されました。');
     }
+    
+    
     public function store2(Request $request)
     {
         // `Prohibitdays` モデルのテーブルを削除
@@ -77,5 +91,18 @@ class MasterController extends Controller
     
         return redirect()->route('master');
     }
-    
+    public function del(Request $request)
+    {
+        // リクエストから削除する日付のリストを取得
+        $datesToDelete = $request->input('dates', []);
+
+        // 入力された日付に該当するシフトを削除
+        if (!empty($datesToDelete)) {
+            Shift::whereIn('date', $datesToDelete)->delete();
+            return redirect('/master');
+        }
+
+        // 日付が指定されていない場合はエラーレスポンスを返す
+        return response()->json(['success' => false, 'message' => '削除する日付が指定されていません']);
+    }    
 }

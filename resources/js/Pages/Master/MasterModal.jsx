@@ -6,14 +6,17 @@ function MasterModal({ open, setOpen, datas, count }) {
     const { setData, post } = useForm({ datas: {} });
     console.log(datas)
     const handleSubmit = () => {
-        setData("datas", datas);
-        post(route("master.store"), {
-            onSuccess: () => {
-                console.log(datas)
-                setOpen(false); // モーダルを閉じる
-                route('/master')
-            }
-        });
+        console.log(datas)
+        localStorage.setItem('shifts', JSON.stringify(datas));
+        setOpen(false);
+        // setData("datas", datas);
+        // post(route("master.store"), {
+        //     onSuccess: () => {
+        //         console.log(datas)
+        //         setOpen(false); // モーダルを閉じる
+        //         route('/master')
+        //     }
+        // });
     };
     useEffect(() => {
         setData("datas", datas);
@@ -37,7 +40,7 @@ function MasterModal({ open, setOpen, datas, count }) {
             <Typography variant="h6" component="h2" style={{ fontWeight: "bold" }}>
                 現在選択されたメンバーでシフト表をつくりますか？
             </Typography>
-            {/* 
+            
             <Typography>
                 <div>
                     {Object.entries(datas).map(([date, members], index) => (
@@ -51,7 +54,7 @@ function MasterModal({ open, setOpen, datas, count }) {
                         </div>
                     ))}
                 </div>
-            </Typography> */}
+            </Typography>
 
             <div style={{ gap: "8px", display: 'flex' }}>
                 <Button onClick={() => setOpen(false)} variant="outlined" sx={{ mt: 2 }}>
