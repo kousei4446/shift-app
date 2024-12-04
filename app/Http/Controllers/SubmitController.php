@@ -13,6 +13,7 @@ class SubmitController extends Controller
     public function create()
     {
         $userId = Auth::id();
+        $email = Auth::user()->email;
         $currentMonth = Carbon::now()->format('Y-m');
         $nextMonth = Carbon::now()->addMonth()->format('Y-m'); // 来月の日付を取得
         
@@ -28,6 +29,7 @@ class SubmitController extends Controller
         return inertia('Submit/Submit', [
             'hasSubmittedShifts' => $hasSubmittedShifts,
             'prohibitdays' => $prohibitdays,  // 禁止日をビューに渡す
+            'email'=>$email,
         ]);
     }
     
@@ -37,6 +39,8 @@ class SubmitController extends Controller
         // dd($request->all()); // 追加: 受信データを確認
         $dates = $request->date;
         $userId=Auth::id();
+        // dd(Auth::email());
+        // dd(Auth::user());
         $currentMonth = Carbon::now()->format('Y-m');//現在の年月
         $nextMonth = Carbon::now()->addMonth()->format('Y-m'); // 来月の日付を取得
         

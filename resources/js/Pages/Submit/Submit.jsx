@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Head from "../Home/Head";
 import Sidevar from "../Home/Sidevar";
 import { Button } from "@mui/material";
@@ -10,10 +10,9 @@ import holiday from 'holiday-jp';
 import './Submit.css'; // あなたのスタイル
 import SubmitModal from "./SubmitModal";
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
-import Callender from "../Master/Callender";
 
 
-function Submit({ hasSubmittedShifts, prohibitdays }) {
+function Submit({ hasSubmittedShifts, prohibitdays, email }) {
     const [isOpen, setIsOpen] = useState(false);
     const [open, setOpen] = useState(false);
     const [selectedDates, setSelectedDates] = useState(new Set());
@@ -66,7 +65,7 @@ function Submit({ hasSubmittedShifts, prohibitdays }) {
         }
     };
     const today = new Date();
-    const nextMonth = new Date(today.getFullYear(), today.getMonth() +1, 1);
+    const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
 
     return (
         <>

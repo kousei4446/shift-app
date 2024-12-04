@@ -5,11 +5,9 @@ import CheckIcon from '@mui/icons-material/Check';
 import { Link } from '@inertiajs/react';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import HomeIcon from '@mui/icons-material/Home';
-import { Logout } from '@mui/icons-material';
-import Dropdown from '@/Components/Dropdown';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 // import HistoryIcon from '@mui/icons-material/History';
-
+import { usePage } from "@inertiajs/react";
 function Sidevar({ setIsOpen }) {
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && event.key === 'Tab' || event.key === 'Shift') {
@@ -17,6 +15,9 @@ function Sidevar({ setIsOpen }) {
         }
         setIsOpen(open);
     };
+    const { props } = usePage();  // ここでisAdminを受け取る
+    // console.log(props.auth.user.email)
+    // console.log(props.allowedEmail.length)
 
     return (
         <Drawer
@@ -75,12 +76,14 @@ function Sidevar({ setIsOpen }) {
                         </ListItemIcon>
                         <ListItemText primary="プロフィール" />
                     </Link>
-                    <Link href="/master" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "24px" }}>
-                        <ListItemIcon>
-                            <EngineeringIcon style={{ color: "red" }} />
-                        </ListItemIcon>
-                        <ListItemText primary="管理者用" />
-                    </Link>
+                    {props.allowedEmail.length >= 1 &&
+                        <Link href="/master" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "24px" }}>
+                            <ListItemIcon>
+                                <EngineeringIcon style={{ color: "red" }} />
+                            </ListItemIcon>
+                            <ListItemText primary="管理者用" />
+                        </Link>
+                    }
                     {/* <Link href="/login" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "24px" }}>
                         <ListItemIcon>
                             <Logout sx={{ marginLeft: "4px", color: "black" }} ></Logout>
