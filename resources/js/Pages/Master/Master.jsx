@@ -8,6 +8,7 @@ import MasterModal from './MasterModal';
 import ShiftTable from './ShiftTable';
 import Confirm from './Confirm';
 import OpenCa from './OpenCa';
+import AddMaster from './AddMaster';
 
 function Master({ shifts, count, datas }) {
     const { setData, delete: deleteRequest, processing, errors } = useForm();
@@ -159,8 +160,11 @@ function Master({ shifts, count, datas }) {
             {open && <MasterModal open={open} setOpen={setOpen} datas={selectedMembersByDate} count={count} />}
             <Button onClick={() => setOpenCon(true)} className="subBtn" variant="outlined">公開</Button>
             {openCon && <Confirm open={openCon} setOpen={setOpenCon} />}
-            <OpenCa />
+            <div style={{ width: "80vw" }}>
+                <OpenCa />
+            </div>
             <input type='date' />
+            <AddMaster />
         </div>
     );
 }

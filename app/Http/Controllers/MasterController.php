@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Shift;
 use App\Models\CompShift;
+use App\Models\AllowedEmail;
 use App\Models\Prohibitdays;
 use Carbon\Carbon;
 class MasterController extends Controller
@@ -91,6 +92,11 @@ class MasterController extends Controller
     
         return redirect()->route('master');
     }
+    public function store3(Request $request){
+        $data = $request -> input('email');
+        AllowedEmail::create(["email"=>$data]);
+        return redirect()->route('master');
+    } 
     public function del(Request $request)
     {
         // リクエストから削除する日付のリストを取得

@@ -5,7 +5,7 @@ import ShiftTable from "../Master/ShiftTable";
 
 function Confirm({ myShifts, compShift }) {
     const [isOpen, setIsOpen] = useState(false);
-    console.log(compShift);
+    // console.log(compShift);
     return (
         <div>
             <Head isOpen={isOpen} setIsOpen={setIsOpen} />

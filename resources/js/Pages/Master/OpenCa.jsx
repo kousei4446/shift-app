@@ -102,7 +102,6 @@ function OpenCa() {
                 </div>
                 <br />
                 <div style={{
-                    width: "100vw",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
