@@ -32,6 +32,7 @@
         "@fullcalendar/react": "^6.1.15",
         "@mui/icons-material": "^6.1.5",
         "@mui/material": "^6.1.5",
+        "date-fns": "^4.1.0",
         "holiday-jp": "^1.0.0",
         "html2canvas": "^1.4.1",
         "japanese-holidays": "^1.0.10",

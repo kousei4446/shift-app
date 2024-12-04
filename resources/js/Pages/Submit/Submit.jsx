@@ -10,6 +10,7 @@ import holiday from 'holiday-jp';
 import './Submit.css'; // あなたのスタイル
 import SubmitModal from "./SubmitModal";
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
+import { format } from 'date-fns'; // date-fnsを利用して日付をフォーマット
 
 
 function Submit({ hasSubmittedShifts, prohibitdays, email }) {
@@ -25,7 +26,6 @@ function Submit({ hasSubmittedShifts, prohibitdays, email }) {
         const days = date.getDate(); // 例: 15
         const checkDate = new Date(year, month, days);
         const holidayCheck = holiday.isHoliday(checkDate);
-
         // 月曜日（1）と水曜日（3）の場合のみクリックを有効にする
         if ((day === 1 || day === 3) && !holidayCheck && !prohibitDates.includes(info.dateStr)) {
             const dateString = info.dateStr; // YYYY-MM-DD形式の文字列
@@ -55,14 +55,17 @@ function Submit({ hasSubmittedShifts, prohibitdays, email }) {
         const days = date.getDate(); // 例: 15
         const checkDate = new Date(year, month, days);
         const holidayCheck = holiday.isHoliday(checkDate);
+        const formattedDate = format(info.date, 'yyyy-MM-dd'); // 日付をフォーマット
+        // console.log(formattedDate)
         // 月曜日（1）と水曜日（3）の場合以外はスタイルを適用
-        if ((day === 1 || day === 3) && !holidayCheck && !prohibitDates.includes(info.dateStr)) {
+        if ((day === 1 || day === 3) && !holidayCheck && !prohibitDates.includes(formattedDate)) {
             info.el.style.fontWeight = 'bold';
         } else {
             info.el.style.color = 'rgba(0, 0, 0, 0.5)'; // 薄い字にする
             info.el.style.cursor = 'not-allowed'; // カーソルを無効の指にする
             info.el.style.pointerEvents = 'none'; // クリックイベントを無効化
         }
+
     };
     const today = new Date();
     const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);

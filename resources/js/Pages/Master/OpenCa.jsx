@@ -68,8 +68,8 @@ function OpenCa() {
         // 選択された日付をセット
 
         const newSelectedDates = Array.from(selectedDates);
-        console.log(newSelectedDates)
-        console.log(selectedDates)
+        // console.log(newSelectedDates)
+        // console.log(selectedDates)
         setData('datas', newSelectedDates);
 
         // データ送信後に状態リセット
