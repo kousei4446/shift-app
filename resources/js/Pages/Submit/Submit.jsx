@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Head from "../Home/Head";
 import Sidevar from "../Home/Sidevar";
 import { Button } from "@mui/material";
@@ -68,6 +68,21 @@ function Submit({ hasSubmittedShifts, prohibitdays, email }) {
 
     };
     const today = new Date();
+    const [openCa, setOpenCa] = useState(false)
+    useEffect(() => {
+        const today = new Date();
+        const day = today.getDate();
+
+        // console.log(day)
+        if (day >= 15 && day <= 25) {
+            setOpenCa(false)
+            // console.log('今日の日付は15日から25日の間です。');
+        } else {
+            setOpenCa(true)
+            // console.log('今日の日付は15日から25日の間ではありません。');
+        }
+    }, [])
+
     const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
 
     return (
@@ -75,40 +90,86 @@ function Submit({ hasSubmittedShifts, prohibitdays, email }) {
             <div>
                 <Head isOpen={isOpen} setIsOpen={setIsOpen} />
                 {isOpen && <Sidevar setIsOpen={setIsOpen} />}
-                <div style={{ marginTop: "24px", marginLeft: "16px", marginRight: "16px" }}>
-                    <FullCalendar
-                        plugins={[dayGridPlugin, interactionPlugin]}
-                        initialView="dayGridMonth"
-                        initialDate={nextMonth} // 来月の初日を設定
-                        headerToolbar={{
-                            start: 'title',
-                            center: '',
-                            end: ''
+                {openCa ?
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            height: "80vh",
+                            textAlign: "center",
+                            background: "linear-gradient(135deg, #f7f9fc, #e0e7ff)",
+                            borderRadius: "16px",
+                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                            margin: "16px",
+                            padding: "24px",
                         }}
-                        height={"480px"}
-                        locale={jaLocale}
-                        fixedWeekCount={false}
-                        showNonCurrentDates={false}
-                        hiddenDays={[0, 6]}
-                        dateClick={handleDateClick}
-                        dayCellDidMount={(info) => dayCellDidMount(info, prohibitdays)} // dayCellDidMountイベントハンドラを追加
-                    />
-                </div>
-                <br />
-                <div style={{
-                    width: "100vw",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}>
-                    <Button
-                        className="subBtn"
-                        variant="outlined"
-                        onClick={() => setOpen(!open)}
                     >
-                        <EditCalendarIcon style={{ fontSize: "16px" }} />{hasSubmittedShifts && "再"}提出
-                    </Button>
-                </div>
+                        <EditCalendarIcon
+                            style={{
+                                fontSize: "64px",
+                                color: "#1976d2",
+                                marginBottom: "16px",
+                            }}
+                        />
+                        <h1
+                            style={{
+                                fontSize: "1.5rem",
+                                fontWeight: "bold",
+                                color: "#333",
+                            }}
+                        >
+                            提出日までお待ちください。
+                        </h1>
+                        <p
+                            style={{
+                                fontSize: "1rem",
+                                color: "#555",
+                                marginTop: "8px",
+                            }}
+                        >
+                            シフト提出の受付は15日から25日の間で行われます。
+                        </p>
+                    </div>
+                    :
+                    <>
+                        <div style={{ marginTop: "24px", marginLeft: "16px", marginRight: "16px" }}>
+                            <FullCalendar
+                                plugins={[dayGridPlugin, interactionPlugin]}
+                                initialView="dayGridMonth"
+                                initialDate={nextMonth} // 来月の初日を設定
+                                headerToolbar={{
+                                    start: 'title',
+                                    center: '',
+                                    end: ''
+                                }}
+                                height={"480px"}
+                                locale={jaLocale}
+                                fixedWeekCount={false}
+                                showNonCurrentDates={false}
+                                hiddenDays={[0, 6]}
+                                dateClick={handleDateClick}
+                                dayCellDidMount={(info) => dayCellDidMount(info, prohibitdays)} // dayCellDidMountイベントハンドラを追加
+                            />
+                        </div>
+                        <br />
+                        <div style={{
+                            width: "100vw",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}>
+                            <Button
+                                className="subBtn"
+                                variant="outlined"
+                                onClick={() => setOpen(!open)}
+                            >
+                                <EditCalendarIcon style={{ fontSize: "16px" }} />{hasSubmittedShifts && "再"}提出
+                            </Button>
+                        </div>
+                    </>
+                }
 
             </div>
             {open && <SubmitModal open={open} setOpen={setOpen} selectedDates={selectedDates} hasSubmittedShifts={hasSubmittedShifts} />}

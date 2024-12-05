@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from '@inertiajs/react';
 import Head from '../Home/Head';
 import Sidevar from '../Home/Sidevar';
-import { Button } from '@mui/material';
 import "./Master.css";
 import MasterModal from './MasterModal';
 import ShiftTable from './ShiftTable';
 import Confirm from './Confirm';
 import OpenCa from './OpenCa';
 import AddMaster from './AddMaster';
+import { Button, Box, Typography, Paper, Grid } from '@mui/material';
+import './Master.css'; // スタイルファイル
 
 function Master({ shifts, count, datas }) {
     const { setData, delete: deleteRequest, processing, errors } = useForm();
@@ -50,16 +51,20 @@ function Master({ shifts, count, datas }) {
 
     const { nextMonthStart, nextMonthEnd } = getNextMonthRange();
 
+    useEffect(() => {
+        // フィルタリングした来月のシフト以外を削除
+        const selectedDates = shifts.filter(shift => {
+            const shiftDate = new Date(shift.date);
+            return shiftDate < nextMonthStart || shiftDate > nextMonthEnd;
+        }).map(shift => shift.date); // 削除対象の日付を選定
+
+        setData('dates', selectedDates); // 削除対象の日付データをセット
+
+    }, [])
     // 来月以外のシフトを削除する
     const delShift = () => {
         // まず、nextMonthStart と nextMonthEnd を Date オブジェクトに変換
         const { nextMonthStart, nextMonthEnd } = getNextMonthRange();
-
-        // シフトの日付が来月分かどうかでフィルタリング
-        const filteredShifts = shifts.filter(shift => {
-            const shiftDate = new Date(shift.date); // 日付を Date オブジェクトに変換
-            return shiftDate >= nextMonthStart && shiftDate <= nextMonthEnd;
-        });
 
         // フィルタリングした来月のシフト以外を削除
         const selectedDates = shifts.filter(shift => {
@@ -123,48 +128,137 @@ function Master({ shifts, count, datas }) {
     };
 
     const sortedDatas = [...newDatas].sort((a, b) => new Date(a.date) - new Date(b.date));
-
+    const [isOpenCall, setIsOpenCall] = useState(false)
+    const [isOpenAdd, setIsOpenAdd] = useState(false);
     return (
-        <div>
-            <div>
-                <Head isOpen={isOpen} setIsOpen={setIsOpen} />
-                {isOpen && <Sidevar setIsOpen={setIsOpen} />}
-            </div>
-            <Button onClick={delShift} style={{ color: "red" }} disabled={processing}>
-                来月分以外のシフトの削除
-            </Button>
+        <div className="master-container">
+            {/* ヘッダーとサイドバー */}
+            <Head isOpen={isOpen} setIsOpen={setIsOpen} />
+            {isOpen && <Sidevar setIsOpen={setIsOpen} />}
 
-            <div>
+            {/* シフト削除ボタン */}
+            <Box sx={{ marginTop: 3, marginRight: 1, textAlign: 'right' }}>
+                <Button
+                    onClick={delShift}
+                    variant="contained"
+                    color="error"
+                    sx={{
+                        fontWeight: 'bold',
+                        padding: '4px 8px',
+                        fontSize: '13px',
+                        '&:hover': { backgroundColor: '#d32f2f' },
+                    }}
+                    disabled={processing}
+                >
+                    先月分のシフトの削除
+                </Button>
+            </Box>
+            {/* シフトデータの表示 */}
+            <Box sx={{ marginTop: 4, marginRight: 2, marginLeft: 2 }}>
                 {sortedDatas.map((shift) => (
-                    <div key={shift.date}>
-                        <p>日付: {shift.date}</p>
-                        <p style={{ display: "flex", flexWrap: "wrap" }}>
+                    <Paper key={shift.date} sx={{ padding: 2, marginBottom: 2, backgroundColor: '#f9f9f9' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
+                            日付: {shift.date}
+                        </Typography>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                             {shift.members.map((member, index) => (
-                                <div
+                                <Button
                                     key={`${member}-${index}`}
-                                    className={`shift-button ${selectedMembersByDate[shift.date]?.includes(member) ? 'selected' : ''}`}
+                                    variant="outlined"
+                                    sx={{
+                                        padding: '8px 16px',
+                                        borderColor: selectedMembersByDate[shift.date]?.includes(member) ? 'primary.main' : 'grey.500',
+                                        color: selectedMembersByDate[shift.date]?.includes(member) ? 'white' : 'black',
+                                        backgroundColor: selectedMembersByDate[shift.date]?.includes(member) ? 'blue' : '',
+                                        // '&:hover': { backgroundColor: 'primary.main', color: 'white' },
+                                    }}
                                     onClick={() => register(member, shift.date)}
                                 >
                                     {member}
-                                </div>
+                                </Button>
                             ))}
-                        </p>
-                        <br />
-                    </div>
+                        </Box>
+                    </Paper>
                 ))}
-            </div>
-            <div>
-                <Button onClick={handleClick} className="subBtn" variant="outlined">表の作成</Button>
-            </div>
+            </Box>
+
+            {/* ボタンを中央に配置 */}
+            <Box sx={{ textAlign: 'center', marginTop: 3 }}>
+                <Button
+                    onClick={() => setOpen(true)}
+                    variant="outlined"
+                    sx={{
+                        margin: '10px',
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        borderColor: 'primary.main',
+                        '&:hover': {
+                            backgroundColor: 'primary.main',
+                            color: 'white',
+                        },
+                    }}
+                >
+                    表の作成
+                </Button>
+            </Box>
+
+            {/* ShiftTable コンポーネント */}
             <ShiftTable datas={outputData} />
-            {open && <MasterModal open={open} setOpen={setOpen} datas={selectedMembersByDate} count={count} />}
-            <Button onClick={() => setOpenCon(true)} className="subBtn" variant="outlined">公開</Button>
+
+            {/* モーダルの表示 */}
+            {open && <MasterModal open={open} setOpen={setOpen} datas={selectedMembersByDate} />}
+            <Button
+                onClick={() => setOpenCon(true)}
+                variant="outlined"
+                sx={{
+                    margin: '10px',
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    '&:hover': { backgroundColor: 'primary.main', color: 'white' },
+                }}
+            >
+                公開
+            </Button>
             {openCon && <Confirm open={openCon} setOpen={setOpenCon} />}
-            <div style={{ width: "80vw" }}>
-                <OpenCa />
-            </div>
-            <input type='date' />
-            <AddMaster />
+
+            {/* 特定の日を入力できないようにするボタン */}
+            <Box sx={{ marginTop: 4, textAlign: 'center' }}>
+                <Button
+                    variant="outlined"
+                    onClick={() => setIsOpenCall((prev) => !prev)}
+                    sx={{
+                        margin: '10px',
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        '&:hover': { backgroundColor: 'primary.main', color: 'white' },
+                    }}
+                >
+                    お盆など特定の日を入力できないようにする
+                </Button>
+                <p>※基本的にデフォルトで休日は除外されています</p>
+                {isOpenCall && (
+                    <Box sx={{ width: '80vw', marginTop: 2 }}>
+                        <OpenCa />
+                    </Box>
+                )}
+            </Box>
+
+            {/* 管理者の追加 */}
+            <Box sx={{ textAlign: 'center', marginTop: 3 }}>
+                <Button
+                    variant="outlined"
+                    onClick={() => setIsOpenAdd((prev) => !prev)}
+                    sx={{
+                        margin: '10px',
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        '&:hover': { backgroundColor: 'primary.main', color: 'white' },
+                    }}
+                >
+                    管理者の追加
+                </Button>
+                {isOpenAdd && <AddMaster />}
+            </Box>
         </div>
     );
 }

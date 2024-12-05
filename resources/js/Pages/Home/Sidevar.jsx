@@ -6,8 +6,10 @@ import { Link } from '@inertiajs/react';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import HomeIcon from '@mui/icons-material/Home';
 import EngineeringIcon from '@mui/icons-material/Engineering';
-// import HistoryIcon from '@mui/icons-material/History';
 import { usePage } from "@inertiajs/react";
+import { Logout } from '@mui/icons-material';
+import Dropdown from '@/Components/Dropdown';
+
 function Sidevar({ setIsOpen }) {
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && event.key === 'Tab' || event.key === 'Shift') {
@@ -15,9 +17,8 @@ function Sidevar({ setIsOpen }) {
         }
         setIsOpen(open);
     };
-    const { props } = usePage();  // ここでisAdminを受け取る
-    // console.log(props.auth.user.email)
-    // console.log(props.allowedEmail.length)
+    const { props } = usePage();
+    const { url } = usePage();
 
     return (
         <Drawer
@@ -30,78 +31,53 @@ function Sidevar({ setIsOpen }) {
                 flexShrink: 0,
                 '& .MuiDrawer-paper': {
                     width: '70vw',
-                    backgroundColor: '#f5f5f5', // 背景色を白っぽい灰色に
+                    backgroundColor: '#2C3E50', // ダークな背景色
                     padding: '20px',
+                    borderRadius: '8px',
+                    color: '#ecf0f1',
                 },
             }}
         >
-            <Box
-                sx={{
-                    height: '100vh',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'flex-start',
-                    padding: '10px',
-                }}
-            >
+            <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', padding: '10px' }}>
                 {/* タイトル */}
-                <Typography variant="h5" gutterBottom sx={{ color: '#333', fontWeight: 'bold' }}>
+                <Typography variant="h5" gutterBottom sx={{ color: '#ECF0F1', fontWeight: 'bold', textAlign: 'center', marginBottom: '20px' }}>
                     メニュー
                 </Typography>
 
                 {/* メニューリスト */}
-                <List >
-                    <Link href="/home" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "24px", marginTop: "16px" }}>
+                <List>
+                    <Link href="/home" style={{ display: 'flex', alignItems: 'center', padding: '12px', borderRadius: '8px', marginBottom: '16px', backgroundColor: url == "/home" ? '#8A9A5B' : 'transparent' }}>
                         <ListItemIcon>
-                            <HomeIcon sx={{ color: 'black' }} />
+                            <HomeIcon sx={{ color: '#ECF0F1' }} />
                         </ListItemIcon>
-                        <ListItemText primary="ホーム" />
+                        <ListItemText primary="ホーム" sx={{ color: '#ECF0F1', fontSize: '1rem' }} />
                     </Link>
-                    <Link href="/submit" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "24px", marginTop: "16px" }}>
+                    <Link href="/submit" style={{ display: 'flex', alignItems: 'center', padding: '12px', borderRadius: '8px', marginBottom: '16px', backgroundColor: url == "/submit" ? '#8A9A5B' : 'transparent' }}>
                         <ListItemIcon>
-                            <AssignmentTurnedInIcon sx={{ color: '#1976d2' }} />
+                            <AssignmentTurnedInIcon sx={{ color: '#3498DB' }} />
                         </ListItemIcon>
-                        <ListItemText primary="シフト提出" />
+                        <ListItemText primary="シフト提出" sx={{ color: '#ECF0F1', fontSize: '1rem' }} />
                     </Link>
-                    <Link href="/confirm" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "24px" }}>
-
+                    <Link href="/confirm" style={{ display: 'flex', alignItems: 'center', padding: '12px', borderRadius: '8px', marginBottom: '16px', backgroundColor: url == "/confirm" ? '#8A9A5B' : 'transparent' }}>
                         <ListItemIcon>
-                            <CheckIcon sx={{ color: '#43a047' }} />
+                            <CheckIcon sx={{ color: '#27AE60' }} />
                         </ListItemIcon>
-                        <ListItemText primary="シフト確認" />
-                    </Link>
-                    <Link href="/profile" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "24px" }}>
-                        <ListItemIcon>
-                            <AccountBoxIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="プロフィール" />
+                        <ListItemText primary="シフト確認" sx={{ color: '#ECF0F1', fontSize: '1rem' }} />
                     </Link>
                     {props.allowedEmail.length >= 1 &&
-                        <Link href="/master" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "24px" }}>
+                        <Link href="/master" style={{ display: 'flex', alignItems: 'center', padding: '12px', borderRadius: '8px', marginBottom: '16px', backgroundColor: 'transparent' }}>
                             <ListItemIcon>
-                                <EngineeringIcon style={{ color: "red" }} />
+                                <EngineeringIcon sx={{ color: '#E74C3C' }} />
                             </ListItemIcon>
-                            <ListItemText primary="管理者用" />
+                            <ListItemText primary="管理者用" sx={{ color: '#ECF0F1', fontSize: '1rem' }} />
                         </Link>
                     }
-                    {/* <Link href="/login" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "24px" }}>
+                    <Link href="/login" style={{ display: 'flex', alignItems: 'center', padding: '12px', borderRadius: '8px', marginBottom: '16px', backgroundColor: 'transparent' }}>
                         <ListItemIcon>
-                            <Logout sx={{ marginLeft: "4px", color: "black" }} ></Logout>
+                            <Logout sx={{ marginLeft: '4px', color: '#F39C12' }} />
                         </ListItemIcon>
-                        <ListItemText primary="ログアウト" />
-
-                        <Dropdown.Link href={route('logout')} method="post" as="button">
-                            <p>ログアウト</p>
-                        </Dropdown.Link>
-                    </Link> */}
-
-
-                    {/* <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "24px" }}>
-                        <ListItemIcon>
-                            <HistoryIcon sx={{ color: '#ff7043' }} />
-                        </ListItemIcon>
-                        <ListItemText primary="これまでの記録" />
-                    </div> */}
+                        <ListItemText primary="ログアウト" sx={{ color: '#ECF0F1', fontSize: '1rem' }} />
+                    </Link>
                 </List>
             </Box>
         </Drawer>

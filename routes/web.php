@@ -7,6 +7,7 @@ use App\Http\Controllers\SubmitController;
 use App\Http\Controllers\ConfirmController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\NextShiftController;
+use App\Http\Controllers\MainsController;
 use App\Models\AllowedEmail;
 
 
@@ -27,10 +28,10 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('l
 
 // 認証に必要なルート
 Route::middleware('auth')->group(function () {
-    Route::get('/home', function () {
-        return inertia('Home/Home');;  // 認証後に表示されるダッシュボード
-    })->name('home');
-
+    // Route::get('/home', function () {
+    //     return inertia('Home/Home');;  // 認証後に表示されるダッシュボード
+    // })->name('home');
+    Route::get('/home',[MainsController::class,'index'])->name('home');
     // シフト提出のルート
     Route::get('/submit',[SubmitController::class,'create'])->name('submit');
     Route::post('/submit',[SubmitController::class,'store'])->name('submit.store');

@@ -109,6 +109,6 @@ class MasterController extends Controller
         }
 
         // 日付が指定されていない場合はエラーレスポンスを返す
-        return response()->json(['success' => false, 'message' => '削除する日付が指定されていません']);
+        return ;
     }    
 }
