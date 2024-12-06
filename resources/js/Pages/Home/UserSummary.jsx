@@ -21,7 +21,7 @@ export function UserSummary({ mes }) {
             <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Avatar
-                        alt="ユーザーアバター"
+                        alt={name}
                         src="/placeholder-user.jpg"
                         sx={{
                             width: 64, height: 64, mr: 2, border: '2px solid #8A9A5B', // アバターのボーダー追加

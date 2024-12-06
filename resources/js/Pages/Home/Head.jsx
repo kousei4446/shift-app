@@ -5,65 +5,87 @@ import { Logout } from "@mui/icons-material";
 import Dropdown from "@/Components/Dropdown";
 
 export default function Head({ isOpen, setIsOpen }) {
-    const handleToggle = () => {
-        setIsOpen(!isOpen);
-    };
-
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
+
     const handleClose = () => {
         setAnchorEl(null);
     };
 
+    const handleToggle = () => {
+        setIsOpen(!isOpen);
+    };
+
     return (
-        <>
-            <Box
+        <Box
+            sx={{
+                padding: "12px 24px",
+                height: "64px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                backgroundColor: "#2c3e50", // ダークグレーの背景
+                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // シャドウ
+                borderBottom: "2px solid #34495e", // 境界線に微妙な変化
+            }}
+        >
+            {/* アプリタイトル */}
+            <Typography
+                variant="h5"
                 sx={{
-                    padding: "16px 24px",
-                    height: "64px",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    backgroundColor: "#f5c542", // 明るい黄色
-                    boxShadow: 2, // シャドウを追加
+                    fontWeight: "700",
+                    color: "#ecf0f1", // 明るいテキストカラー
+                    marginLeft: "8px",
                 }}
             >
-                <Button
-                    id="basic-button"
-                    aria-controls={open ? 'basic-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? 'true' : undefined}
-                    onClick={handleClick}
-                    sx={{ marginLeft: "-16px" }}
-                >
-                    <Avatar sx={{ bgcolor: "primary.main" }}>D</Avatar> {/* 初期を「D」に変更 */}
-                </Button>
-                <Typography variant="h6" sx={{ fontWeight: "bold", marginLeft: "-8px", marginTop: "4px" }}>
-                    シフト提出アプリ
-                </Typography>
-                <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                        'aria-labelledby': 'basic-button',
-                    }}
-                >
-                    <MenuItem onClick={handleClose}>
-                        <Logout sx={{ marginRight: 1 }} />
-                        <Dropdown.Link href={route('logout')} method="post" as="button">
-                            ログアウト
-                        </Dropdown.Link>
-                    </MenuItem>
-                </Menu>
-                <IconButton onClick={handleToggle} sx={{ paddingLeft: 1 }}>
-                    <DensityMediumIcon sx={{ color: "black" }} />
-                </IconButton>
-            </Box>
-        </>
+                シフト提出アプリ
+            </Typography>
+
+            {/* メニュー */}
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                }}
+                sx={{
+                    '& .MuiPaper-root': {
+                        backgroundColor: "#34495e", // メニューの背景を暗いグレーに
+                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)", // やや濃いシャドウ
+                        borderRadius: "8px",
+                        color: "#ecf0f1", // テキストカラー
+                    },
+                }}
+            >
+                <MenuItem onClick={handleClose} sx={{ '&:hover': { backgroundColor: "#2c3e50" } }}>
+                    <Logout sx={{ marginRight: 1, color: "#e74c3c" }} />
+                    <Dropdown.Link href={route('logout')} method="post" as="button" style={{ color: "#ecf0f1" }}>
+                        ログアウト
+                    </Dropdown.Link>
+                </MenuItem>
+            </Menu>
+
+            {/* ナビゲーションのトグルボタン */}
+            <IconButton
+                onClick={handleToggle}
+                sx={{
+                    padding: "8px",
+                    backgroundColor: "#34495e",
+                    borderRadius: "50%",
+                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                    '&:hover': {
+                        backgroundColor: "#2c3e50",
+                    },
+                }}
+            >
+                <DensityMediumIcon sx={{ color: "#ecf0f1" }} />
+            </IconButton>
+        </Box>
     );
 }

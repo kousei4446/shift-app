@@ -11,7 +11,6 @@ export function ShiftSummary({ data }) {
                 padding: "16px",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
                 borderRadius: "12px",
-                maxWidth: "600px"
             }}
         >
             <CardContent>
@@ -34,7 +33,7 @@ export function ShiftSummary({ data }) {
                         component="h6"
                         sx={{ fontWeight: 'bold', color: '#333' }}
                     >
-                        今週のシフト
+                        今月のシフト
                     </Typography>
                 </Box>
                 <List disablePadding>

@@ -9,6 +9,8 @@ import EngineeringIcon from '@mui/icons-material/Engineering';
 import { usePage } from "@inertiajs/react";
 import { Logout } from '@mui/icons-material';
 import Dropdown from '@/Components/Dropdown';
+import LogoutModal from '../LogoutModal';
+import { useState } from 'react';
 
 function Sidevar({ setIsOpen }) {
     const toggleDrawer = (open) => (event) => {
@@ -19,7 +21,7 @@ function Sidevar({ setIsOpen }) {
     };
     const { props } = usePage();
     const { url } = usePage();
-
+    const [open, setOpen] = useState(false);
     return (
         <Drawer
             anchor="right"
@@ -72,14 +74,15 @@ function Sidevar({ setIsOpen }) {
                             <ListItemText primary="管理者用" sx={{ color: '#ECF0F1', fontSize: '1rem' }} />
                         </Link>
                     }
-                    <Link href="/login" style={{ display: 'flex', alignItems: 'center', padding: '12px', borderRadius: '8px', marginBottom: '16px', backgroundColor: 'transparent' }}>
+                    <div onClick={() => setOpen(prev => !prev)} style={{ display: 'flex', alignItems: 'center', padding: '12px', borderRadius: '8px', marginBottom: '16px', backgroundColor: 'transparent' }}>
                         <ListItemIcon>
                             <Logout sx={{ marginLeft: '4px', color: '#F39C12' }} />
                         </ListItemIcon>
                         <ListItemText primary="ログアウト" sx={{ color: '#ECF0F1', fontSize: '1rem' }} />
-                    </Link>
+                    </div>
                 </List>
             </Box>
+            {open && <LogoutModal setOpen={setOpen} />}
         </Drawer>
     );
 }

@@ -207,18 +207,21 @@ function Master({ shifts, count, datas }) {
 
             {/* モーダルの表示 */}
             {open && <MasterModal open={open} setOpen={setOpen} datas={selectedMembersByDate} />}
-            <Button
-                onClick={() => setOpenCon(true)}
-                variant="outlined"
-                sx={{
-                    margin: '10px',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    '&:hover': { backgroundColor: 'primary.main', color: 'white' },
-                }}
-            >
-                公開
-            </Button>
+
+            <Box sx={{ textAlign: 'center', marginTop: 3 }}>
+                <Button
+                    onClick={() => setOpenCon(true)}
+                    variant="outlined"
+                    sx={{
+                        margin: '10px',
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        '&:hover': { backgroundColor: 'primary.main', color: 'white' },
+                    }}
+                >
+                    公開
+                </Button>
+            </Box>
             {openCon && <Confirm open={openCon} setOpen={setOpenCon} />}
 
             {/* 特定の日を入力できないようにするボタン */}
@@ -237,7 +240,7 @@ function Master({ shifts, count, datas }) {
                 </Button>
                 <p>※基本的にデフォルトで休日は除外されています</p>
                 {isOpenCall && (
-                    <Box sx={{ width: '80vw', marginTop: 2 }}>
+                    <Box sx={{ marginTop: 2, textAlign: 'center' }}>
                         <OpenCa />
                     </Box>
                 )}

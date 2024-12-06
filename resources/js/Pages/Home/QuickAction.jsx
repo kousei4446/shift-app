@@ -2,10 +2,13 @@ import React from 'react';
 import { Card, CardContent, Typography, Grid, Button } from '@mui/material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import MessageIcon from '@mui/icons-material/Message';
 import { router } from '@inertiajs/react';
+import { Logout } from '@mui/icons-material';
+import { useState } from 'react';
+import LogoutModal from '../LogoutModal';
 
 export function QuickActions() {
+    const [open, setOpen] = useState(false);
     return (
         <Card sx={{ margin: "auto 8px", boxShadow: 3, borderRadius: 2, backgroundColor: '#fff' }}>
             <CardContent>
@@ -35,6 +38,7 @@ export function QuickActions() {
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <Button
+                            onClick={() => router.get('/confirm')}
                             variant="outlined"
                             startIcon={<AssignmentIcon />}
                             fullWidth
@@ -52,10 +56,12 @@ export function QuickActions() {
                             シフト確認
                         </Button>
                     </Grid>
+
                     <Grid item xs={12} sm={4}>
                         <Button
+                            onClick={() => setOpen(prev => !prev)}
                             variant="outlined"
-                            startIcon={<MessageIcon />}
+                            startIcon={<Logout />}
                             fullWidth
                             sx={{
                                 height: '100%',
@@ -71,6 +77,7 @@ export function QuickActions() {
                             ログアウト
                         </Button>
                     </Grid>
+                    {open && <LogoutModal setOpen={setOpen} />}
                 </Grid>
             </CardContent>
         </Card>

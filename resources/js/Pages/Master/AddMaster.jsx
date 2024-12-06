@@ -1,11 +1,15 @@
 import { useForm } from "@inertiajs/react";
 import { Box, TextField, Typography, Button } from "@mui/material"; // ButtonをMUIからインポート
+import { useEffect } from "react";
 import { useState } from "react";
 
 function AddMaster() {
     const { setData, post } = useForm({ email: "" });
     const [email, setEmail] = useState("");
+    useEffect(() => {
+        setData("email", email); // フォームにメールアドレスを設定
 
+    }, [email])
     const handleSubmit = () => {
         if (email.length == 0) {
             return alert("メールアドレスを入力してください")

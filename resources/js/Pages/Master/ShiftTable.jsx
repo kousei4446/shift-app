@@ -43,6 +43,23 @@ function ShiftTable({ datas }) {
             });
     };
 
+    const renderEmptyCells = (userCount) => {
+        // ユーザー数に応じた空のセルを生成
+        const emptyCells = [];
+        for (let i = 0; i < 2 - userCount; i++) {
+            emptyCells.push(
+                <td key={`empty-${i}`} style={cellStyle}></td>
+            );
+        }
+        return emptyCells;
+    };
+
+    const cellStyle = {
+        padding: '8px',
+        textAlign: 'center',
+        borderRight: '1px solid #ddd', // 列間の枠線
+    };
+
     return (
         <div style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '16px', backgroundColor: '#f9f9f9', borderRadius: '12px' }}>
             {/* PDFダウンロードボタン */}
@@ -71,30 +88,58 @@ function ShiftTable({ datas }) {
             </div>
 
             <div style={{ overflowX: 'auto' }}>
-                <table id="shift-table" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '16px', tableLayout: 'fixed' }}>
+                <table id="shift-table" style={{
+                    width: '100%',
+                    borderCollapse: 'collapse',
+                    marginTop: '16px',
+                    tableLayout: 'fixed',
+                    borderRadius: '8px', // テーブルの角を丸くする
+                    border: '2px solid #ddd', // 薄い枠線
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // 影を追加
+                }}>
                     <thead>
                         <tr>
-                            <th style={{ padding: '12px', textAlign: 'center', backgroundColor: '#f1f1f1', fontSize: '0.9rem' }}>日付</th>
-                            <th style={{ padding: '12px', textAlign: 'center', backgroundColor: '#f1f1f1', fontSize: '0.9rem' }}>名前</th>
+                            <th style={headerStyle}>日付</th>
+                            <th style={headerStyle}>名前</th>
+                            <th style={headerStyle}></th>
+                            <th style={headerStyle}></th>
                         </tr>
                     </thead>
                     <tbody>
                         {sortedDates.map((date, index) => {
                             const isWednesday = new Date(date).getDay() === 3;
+                            const userCount = groupedDatas[date].length;
+
                             return (
-                                <tr key={index}>
-                                    <td style={{ padding: '12px', textAlign: 'center', backgroundColor: isWednesday ? '#d0f0c0' : 'transparent' }}>{date}</td>
+                                <tr key={index} style={{ borderBottom: '1px solid #ddd' }}>
+                                    <td style={{
+                                        ...cellStyle,
+                                        backgroundColor: isWednesday ? '#d0f0c0' : 'transparent',
+                                    }}>
+                                        {date.substring(5)}
+                                    </td>
                                     {groupedDatas[date].map((user, userIndex) => (
-                                        <td key={userIndex} style={{ padding: '12px', textAlign: 'center' }}>{user}</td>
+                                        <td key={userIndex} style={cellStyle}>
+                                            {user}
+                                        </td>
                                     ))}
+                                    {renderEmptyCells(userCount)}
                                 </tr>
                             );
                         })}
                     </tbody>
                 </table>
             </div>
-        </div>
+        </div >
     );
 }
+
+const headerStyle = {
+    padding: '12px',
+    textAlign: 'center',
+    backgroundColor: '#f1f1f1',
+    fontSize: '0.9rem',
+    borderBottom: '2px solid #ddd', // 下部の枠線
+};
 
 export default ShiftTable;
