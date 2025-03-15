@@ -14,6 +14,6 @@ class AllowedEmailsSeeder extends Seeder
     public function run(): void
     {
         //
-        AllowedEmail::create(['email' => 'e1922022@oit.ac.jp']);
+        AllowedEmail::create(['email' => 'test@test']);
     }
 }
