@@ -1,0 +1,1 @@
+.shift-button{padding:8px 16px;margin:4px;border:1px solid #ccc;border-radius:4px;cursor:pointer;transition:background-color .3s,color .3s}.shift-button.selected{background-color:#007bff;color:#fff}.shift-button:hover{color:#00f}.registered{background-color:#007bff80;color:#ffffffb3;pointer-events:none;cursor:not-allowed}
