@@ -8,11 +8,11 @@ function LogoutModal({ setOpen }) {
         <div className="modal-overlay">
             <div className="modal-container">
                 <p className="modal-message">本当にログアウトしますか？</p>
-                <MenuItem className="modal-button red-button">
-                    <Dropdown.Link className="modal-link" href={route('logout')} method="post" as="button">
+                <Dropdown.Link className="modal-button red-button" href={route('logout')} method="post" as="button">
+                    <p style={{ textAlign: "center" }}>
                         はい
-                    </Dropdown.Link>
-                </MenuItem>
+                    </p>
+                </Dropdown.Link>
                 <button
                     onClick={() => setOpen(false)}
                     className="modal-button blue-button"
