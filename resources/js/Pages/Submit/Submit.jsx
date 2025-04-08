@@ -78,7 +78,7 @@ function Submit({ hasSubmittedShifts, prohibitdays, email }) {
             setOpenCa(false)
             // console.log('今日の日付は15日から25日の間です。');
         } else {
-            setOpenCa(true)
+            setOpenCa(false)
             // console.log('今日の日付は15日から25日の間ではありません。');
         }
     }, [])
