@@ -1,0 +1,1 @@
+import{r as a,j as s}from"./app-m-HMlsfD.js";import i from"./Head-DhxMtF_9.js";import n from"./Sidevar-B5GHDRtP.js";function x({children:t}){const[e,r]=a.useState(!1);return s.jsxs("div",{className:"min-h-screen bg-gray-100",children:[s.jsx(i,{isOpen:e,setIsOpen:r}),e&&s.jsx(n,{setIsOpen:r}),s.jsx("main",{children:t})]})}export{x as A};
