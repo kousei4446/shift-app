@@ -27,7 +27,7 @@ function Submit({ hasSubmittedShifts, prohibitdays, email }) {
         const checkDate = new Date(year, month, days);
         const holidayCheck = holiday.isHoliday(checkDate);
         // 月曜日（1）と水曜日（3）の場合のみクリックを有効にする
-        if ((day === 1 || day === 3) && !holidayCheck && !prohibitDates.includes(info.dateStr)) {
+        if ((day === 1 || day === 2 || day === 3|| day === 4|| day === 5) && !holidayCheck && !prohibitDates.includes(info.dateStr)) {
             const dateString = info.dateStr; // YYYY-MM-DD形式の文字列
             const newSelectedDates = new Set(selectedDates);
 
@@ -58,7 +58,7 @@ function Submit({ hasSubmittedShifts, prohibitdays, email }) {
         const formattedDate = format(info.date, 'yyyy-MM-dd'); // 日付をフォーマット
         // console.log(formattedDate)
         // 月曜日（1）と水曜日（3）の場合以外はスタイルを適用
-        if ((day === 1 || day === 3) && !holidayCheck && !prohibitDates.includes(formattedDate)) {
+        if ((day === 1 || day === 2 || day === 3|| day === 4|| day === 5) && !holidayCheck && !prohibitDates.includes(formattedDate)) {
             info.el.style.fontWeight = 'bold';
         } else {
             info.el.style.color = 'rgba(0, 0, 0, 0.5)'; // 薄い字にする

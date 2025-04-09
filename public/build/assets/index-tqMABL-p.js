@@ -1,0 +1,1 @@
+import{r as n}from"./app-DhY3GSC_.js";function l(e,r=166){let t;function o(...u){const a=()=>{e.apply(this,u)};clearTimeout(t),t=setTimeout(a,r)}return o.clear=()=>{clearTimeout(t)},o}const c=n.createContext(),i=()=>n.useContext(c)??!1;export{l as d,i as u};
