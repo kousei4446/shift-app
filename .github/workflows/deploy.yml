@@ -46,7 +46,7 @@ jobs:
           host: 52.197.144.4
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "."  # 必要に応じて制限してね！
+          source: "app,bootstrap,config,database,public,resources,routes,artisan,composer.json,composer.lock,package.json,vite.config.js"
           target: "/var/www/shift-app"
 
       - name: EC2でアプリケーション更新処理実行
