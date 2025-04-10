@@ -2,11 +2,12 @@ name: Deploy to EC2
 
 on:
   push:
-    branches: [ main ]  
+    branches: [ main ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Gitチェックアウト
         uses: actions/checkout@v3
@@ -30,7 +31,25 @@ jobs:
           npm install
           npm run build
 
-      - name: デプロイのためにSSH接続
+      - name: ビルド成果物をEC2へ転送（例：public/build）
+        uses: appleboy/scp-action@v0.1.5
+        with:
+          host: 52.197.144.4
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "public/build"
+          target: "/var/www/shift-app/public"
+
+      - name: アプリコードをEC2に転送
+        uses: appleboy/scp-action@v0.1.5
+        with:
+          host: 52.197.144.4
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "."  # 必要に応じて制限してね！
+          target: "/var/www/shift-app"
+
+      - name: EC2でアプリケーション更新処理実行
         uses: appleboy/ssh-action@v0.1.5
         with:
           host: 52.197.144.4
@@ -38,11 +57,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /var/www/shift-app
-            git pull origin main
             composer install --no-dev --optimize-autoloader
-            npm install
-            npm run build
             php artisan migrate --force
             php artisan config:cache
-            # サービスの再起動（例: supervisorctl restart shift-app）
-
+            # サービス再起動（例: sudo supervisorctl restart shift-app）
