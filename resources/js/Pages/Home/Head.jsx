@@ -42,7 +42,7 @@ export default function Head({ isOpen, setIsOpen }) {
                     marginLeft: "8px",
                 }}
             >
-                シフト提出アプリ
+                シフトアプリ
             </Typography>
 
             {/* メニュー */}
